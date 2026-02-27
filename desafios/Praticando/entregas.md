@@ -8,6 +8,8 @@ https://github.com/Glou-robert/flask_project.git
 
 -Filipe Gabriel
 
--Alysson Cesario
+-Allyson Cesario
 
 -Isaac Mateus
+
+-João Batista
