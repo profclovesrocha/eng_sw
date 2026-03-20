@@ -1,0 +1,506 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" xmlns:color="http://www.omg.org/spec/BPMN/non-normative/color/1.0" id="Definitions_SistemaPedidos" targetNamespace="http://bpmn.io/schema/bpmn" exporter="bpmn-js (https://demo.bpmn.io)" exporterVersion="18.13.1">
+  <collaboration id="Collaboration_1">
+    <participant id="Pool_SistemaPedidos" name="Sistema de Pedidos Online ProjetoMais+" processRef="Process_Principal" />
+  </collaboration>
+  <process id="Process_Principal" isExecutable="false">
+    <laneSet id="LaneSet_1">
+      <lane id="Lane_Cliente" name="Cliente">
+        <flowNodeRef>StartEvent_Inicio</flowNodeRef>
+        <flowNodeRef>Gateway_TemConta</flowNodeRef>
+        <flowNodeRef>Task_NavegaProdutos</flowNodeRef>
+        <flowNodeRef>Task_AdicionaCarrinho</flowNodeRef>
+        <flowNodeRef>Task_Checkout</flowNodeRef>
+        <flowNodeRef>Task_SelecionaPagamento</flowNodeRef>
+        <flowNodeRef>Task_AcompanhaPedido</flowNodeRef>
+        <flowNodeRef>EndEvent_Sucesso</flowNodeRef>
+        <flowNodeRef>Task_FazerLogin</flowNodeRef>
+        <flowNodeRef>Task_FazerCadastro</flowNodeRef>
+      </lane>
+      <lane id="Lane_Sistema" name="Sistema">
+        <flowNodeRef>Task_VerificarEstoque</flowNodeRef>
+        <flowNodeRef>Gateway_ProdutoDisponivel</flowNodeRef>
+        <flowNodeRef>Task_ProcessarPagamento</flowNodeRef>
+        <flowNodeRef>Task_NotificarCliente</flowNodeRef>
+        <flowNodeRef>Gateway_PagamentoAprovado</flowNodeRef>
+        <flowNodeRef>Task_ConfirmarPedido</flowNodeRef>
+      </lane>
+      <lane id="Lane_Logistica" name="Logística">
+        <flowNodeRef>Task_SepararItens</flowNodeRef>
+        <flowNodeRef>Task_EmbalarProduto</flowNodeRef>
+        <flowNodeRef>Task_DespacharPedido</flowNodeRef>
+        <flowNodeRef>Task_RealizarEntrega</flowNodeRef>
+        <flowNodeRef>Gateway_EntregaConcluida</flowNodeRef>
+      </lane>
+      <lane id="Lane_Excecoes" name="Exceções / Cancelamentos">
+        <flowNodeRef>Task_ProdutoIndisponivel</flowNodeRef>
+        <flowNodeRef>EndEvent_CancelEstoque</flowNodeRef>
+        <flowNodeRef>Task_PagamentoRecusado</flowNodeRef>
+        <flowNodeRef>EndEvent_CancelPagamento</flowNodeRef>
+        <flowNodeRef>Task_CancelarDevolver</flowNodeRef>
+        <flowNodeRef>EndEvent_Devolucao</flowNodeRef>
+        <flowNodeRef>Task_RegistrarProblema</flowNodeRef>
+        <flowNodeRef>EndEvent_ProblemaEntrega</flowNodeRef>
+      </lane>
+    </laneSet>
+    <sequenceFlow id="Flow_GwAprovado_Confirmar" sourceRef="Gateway_PagamentoAprovado" targetRef="Task_ConfirmarPedido" />
+    <sequenceFlow id="Flow_Problema_EndProblema" sourceRef="Task_RegistrarProblema" targetRef="EndEvent_ProblemaEntrega" />
+    <sequenceFlow id="Flow_GwDisponivel_ProcessaPag" name="Sim" sourceRef="Gateway_ProdutoDisponivel" targetRef="Task_ProcessarPagamento" />
+    <sequenceFlow id="Flow_VerifEstoque_GwDisponivel" sourceRef="Task_VerificarEstoque" targetRef="Gateway_ProdutoDisponivel" />
+    <sequenceFlow id="Flow_CancelarDev_End" sourceRef="Task_CancelarDevolver" targetRef="EndEvent_Devolucao" />
+    <sequenceFlow id="Flow_Notificar_CancelarDev" name="Cancelamento" sourceRef="Task_NotificarCliente" targetRef="Task_CancelarDevolver" />
+    <sequenceFlow id="Flow_Recusado_EndCancel" sourceRef="Task_PagamentoRecusado" targetRef="EndEvent_CancelPagamento" />
+    <sequenceFlow id="Flow_GwAprovado_Recusado" name="Não" sourceRef="Gateway_PagamentoAprovado" targetRef="Task_PagamentoRecusado" />
+    <sequenceFlow id="Flow_Indisponivel_EndCancel" sourceRef="Task_ProdutoIndisponivel" targetRef="EndEvent_CancelEstoque" />
+    <sequenceFlow id="Flow_GwDisponivel_Indisponivel" name="Não" sourceRef="Gateway_ProdutoDisponivel" targetRef="Task_ProdutoIndisponivel" />
+    <sequenceFlow id="Flow_Acompanha_Fim" sourceRef="Task_AcompanhaPedido" targetRef="EndEvent_Sucesso" />
+    <sequenceFlow id="Flow_GwEntregue_Problema" name="Não" sourceRef="Gateway_EntregaConcluida" targetRef="Task_RegistrarProblema" />
+    <sequenceFlow id="Flow_GwEntregue_Acompanha" name="Sim" sourceRef="Gateway_EntregaConcluida" targetRef="Task_AcompanhaPedido" />
+    <sequenceFlow id="Flow_Entregar_GwEntregue" sourceRef="Task_RealizarEntrega" targetRef="Gateway_EntregaConcluida" />
+    <sequenceFlow id="Flow_Despachar_Entregar" sourceRef="Task_DespacharPedido" targetRef="Task_RealizarEntrega" />
+    <sequenceFlow id="Flow_Separar_Embalar" sourceRef="Task_SepararItens" targetRef="Task_EmbalarProduto" />
+    <sequenceFlow id="Flow_SelPag_VerifEstoque" sourceRef="Task_SelecionaPagamento" targetRef="Task_VerificarEstoque" />
+    <sequenceFlow id="Flow_Checkout_SelPag" sourceRef="Task_Checkout" targetRef="Task_SelecionaPagamento" />
+    <sequenceFlow id="Flow_Carrinho_Checkout" sourceRef="Task_AdicionaCarrinho" targetRef="Task_Checkout" />
+    <sequenceFlow id="Flow_Navega_Carrinho" sourceRef="Task_NavegaProdutos" targetRef="Task_AdicionaCarrinho" />
+    <sequenceFlow id="Flow_GwConta_Cadastro" name="Não" sourceRef="Gateway_TemConta" targetRef="Task_FazerCadastro" />
+    <sequenceFlow id="Flow_GwConta_Login" name="Sim" sourceRef="Gateway_TemConta" targetRef="Task_FazerLogin" />
+    <sequenceFlow id="Flow_Inicio_GwConta" sourceRef="StartEvent_Inicio" targetRef="Gateway_TemConta" />
+    <task id="Task_FazerCadastro" name="Fazer cadastro">
+      <incoming>Flow_GwConta_Cadastro</incoming>
+      <outgoing>Flow_1ion8kw</outgoing>
+    </task>
+    <task id="Task_FazerLogin" name="Fazer login">
+      <incoming>Flow_GwConta_Login</incoming>
+      <incoming>Flow_1ion8kw</incoming>
+      <outgoing>Flow_0r8alu3</outgoing>
+    </task>
+    <endEvent id="EndEvent_ProblemaEntrega" name="Problema na entrega">
+      <incoming>Flow_Problema_EndProblema</incoming>
+      <terminateEventDefinition />
+    </endEvent>
+    <task id="Task_RegistrarProblema" name="Registrar problema de entrega">
+      <incoming>Flow_GwEntregue_Problema</incoming>
+      <outgoing>Flow_Problema_EndProblema</outgoing>
+    </task>
+    <task id="Task_ProcessarPagamento" name="Processar pagamento">
+      <incoming>Flow_GwDisponivel_ProcessaPag</incoming>
+      <outgoing>Flow_0mdtpcd</outgoing>
+    </task>
+    <exclusiveGateway id="Gateway_ProdutoDisponivel" name="Produto disponível?">
+      <incoming>Flow_VerifEstoque_GwDisponivel</incoming>
+      <outgoing>Flow_GwDisponivel_ProcessaPag</outgoing>
+      <outgoing>Flow_GwDisponivel_Indisponivel</outgoing>
+    </exclusiveGateway>
+    <task id="Task_VerificarEstoque" name="Verificar estoque">
+      <incoming>Flow_SelPag_VerifEstoque</incoming>
+      <outgoing>Flow_VerifEstoque_GwDisponivel</outgoing>
+    </task>
+    <endEvent id="EndEvent_Devolucao" name="Pedido cancelado / devolvido">
+      <incoming>Flow_CancelarDev_End</incoming>
+      <terminateEventDefinition />
+    </endEvent>
+    <task id="Task_CancelarDevolver" name="Cancelar / Devolver pedido">
+      <incoming>Flow_Notificar_CancelarDev</incoming>
+      <outgoing>Flow_CancelarDev_End</outgoing>
+    </task>
+    <endEvent id="EndEvent_CancelPagamento" name="Cancelado (pagamento recusado)">
+      <incoming>Flow_Recusado_EndCancel</incoming>
+      <terminateEventDefinition />
+    </endEvent>
+    <task id="Task_PagamentoRecusado" name="Notificar pagamento recusado">
+      <incoming>Flow_GwAprovado_Recusado</incoming>
+      <outgoing>Flow_Recusado_EndCancel</outgoing>
+    </task>
+    <endEvent id="EndEvent_CancelEstoque" name="Cancelado (sem estoque)">
+      <incoming>Flow_Indisponivel_EndCancel</incoming>
+      <terminateEventDefinition />
+    </endEvent>
+    <task id="Task_ProdutoIndisponivel" name="Notificar produto indisponível">
+      <incoming>Flow_GwDisponivel_Indisponivel</incoming>
+      <outgoing>Flow_Indisponivel_EndCancel</outgoing>
+    </task>
+    <endEvent id="EndEvent_Sucesso" name="Pedido entregue">
+      <incoming>Flow_Acompanha_Fim</incoming>
+    </endEvent>
+    <task id="Task_AcompanhaPedido" name="Acompanhar pedido">
+      <incoming>Flow_GwEntregue_Acompanha</incoming>
+      <outgoing>Flow_Acompanha_Fim</outgoing>
+    </task>
+    <exclusiveGateway id="Gateway_EntregaConcluida" name="Entrega concluída?">
+      <incoming>Flow_Entregar_GwEntregue</incoming>
+      <outgoing>Flow_GwEntregue_Acompanha</outgoing>
+      <outgoing>Flow_GwEntregue_Problema</outgoing>
+    </exclusiveGateway>
+    <task id="Task_RealizarEntrega" name="Realizar entrega">
+      <incoming>Flow_Despachar_Entregar</incoming>
+      <outgoing>Flow_Entregar_GwEntregue</outgoing>
+    </task>
+    <task id="Task_DespacharPedido" name="Despachar pedido">
+      <incoming>Flow_Embalar_Despachar</incoming>
+      <outgoing>Flow_Despachar_Entregar</outgoing>
+    </task>
+    <task id="Task_EmbalarProduto" name="Embalar produto">
+      <incoming>Flow_Separar_Embalar</incoming>
+      <outgoing>Flow_Embalar_Despachar</outgoing>
+    </task>
+    <task id="Task_SepararItens" name="Separar itens">
+      <incoming>Flow_1yrok90</incoming>
+      <outgoing>Flow_Separar_Embalar</outgoing>
+      <outgoing>Flow_1ag8u3o</outgoing>
+    </task>
+    <task id="Task_SelecionaPagamento" name="Selecionar pagamento">
+      <incoming>Flow_Checkout_SelPag</incoming>
+      <outgoing>Flow_SelPag_VerifEstoque</outgoing>
+    </task>
+    <task id="Task_Checkout" name="Checkout">
+      <incoming>Flow_Carrinho_Checkout</incoming>
+      <outgoing>Flow_Checkout_SelPag</outgoing>
+    </task>
+    <task id="Task_AdicionaCarrinho" name="Adicionar ao carrinho">
+      <incoming>Flow_Navega_Carrinho</incoming>
+      <outgoing>Flow_Carrinho_Checkout</outgoing>
+    </task>
+    <task id="Task_NavegaProdutos" name="Navegar produtos">
+      <incoming>Flow_0r8alu3</incoming>
+      <outgoing>Flow_Navega_Carrinho</outgoing>
+    </task>
+    <exclusiveGateway id="Gateway_TemConta" name="Tem conta?">
+      <incoming>Flow_Inicio_GwConta</incoming>
+      <outgoing>Flow_GwConta_Login</outgoing>
+      <outgoing>Flow_GwConta_Cadastro</outgoing>
+    </exclusiveGateway>
+    <startEvent id="StartEvent_Inicio" name="Início">
+      <outgoing>Flow_Inicio_GwConta</outgoing>
+    </startEvent>
+    <sequenceFlow id="Flow_0r8alu3" sourceRef="Task_FazerLogin" targetRef="Task_NavegaProdutos" />
+    <sequenceFlow id="Flow_1ion8kw" sourceRef="Task_FazerCadastro" targetRef="Task_FazerLogin" />
+    <sequenceFlow id="Flow_Embalar_Despachar" sourceRef="Task_EmbalarProduto" targetRef="Task_DespacharPedido" />
+    <task id="Task_NotificarCliente" name="Notificar cliente">
+      <incoming>Flow_0papssm</incoming>
+      <incoming>Flow_1ag8u3o</incoming>
+      <outgoing>Flow_Notificar_CancelarDev</outgoing>
+    </task>
+    <sequenceFlow id="Flow_0papssm" sourceRef="Task_ConfirmarPedido" targetRef="Task_NotificarCliente" />
+    <exclusiveGateway id="Gateway_PagamentoAprovado" name="Pagamento aprovado?">
+      <incoming>Flow_0mdtpcd</incoming>
+      <outgoing>Flow_GwAprovado_Confirmar</outgoing>
+      <outgoing>Flow_GwAprovado_Recusado</outgoing>
+    </exclusiveGateway>
+    <sequenceFlow id="Flow_0mdtpcd" sourceRef="Task_ProcessarPagamento" targetRef="Gateway_PagamentoAprovado" />
+    <task id="Task_ConfirmarPedido" name="Confirmar pedido">
+      <incoming>Flow_GwAprovado_Confirmar</incoming>
+      <outgoing>Flow_0papssm</outgoing>
+      <outgoing>Flow_1yrok90</outgoing>
+    </task>
+    <sequenceFlow id="Flow_1yrok90" sourceRef="Task_ConfirmarPedido" targetRef="Task_SepararItens" />
+    <sequenceFlow id="Flow_1ag8u3o" sourceRef="Task_SepararItens" targetRef="Task_NotificarCliente" />
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1">
+      <bpmndi:BPMNShape id="Shape_Pool" bpmnElement="Pool_SistemaPedidos" isHorizontal="true">
+        <dc:Bounds x="130" y="70" width="2050" height="710" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Lane_Excecoes" bpmnElement="Lane_Excecoes" isHorizontal="true" bioc:stroke="#6b3c00" bioc:fill="#ffe0b2" color:background-color="#ffe0b2" color:border-color="#6b3c00">
+        <dc:Bounds x="160" y="550" width="2020" height="230" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Lane_Logistica" bpmnElement="Lane_Logistica" isHorizontal="true" bioc:stroke="#831311" bioc:fill="#ffcdd2" color:background-color="#ffcdd2" color:border-color="#831311">
+        <dc:Bounds x="160" y="390" width="2020" height="160" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Lane_Sistema" bpmnElement="Lane_Sistema" isHorizontal="true" bioc:stroke="#0d4372" bioc:fill="#bbdefb" color:background-color="#bbdefb" color:border-color="#0d4372">
+        <dc:Bounds x="160" y="240" width="2020" height="150" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Lane_Cliente" bpmnElement="Lane_Cliente" isHorizontal="true" bioc:stroke="#205022" bioc:fill="#c8e6c9" color:background-color="#c8e6c9" color:border-color="#205022">
+        <dc:Bounds x="160" y="70" width="2020" height="170" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_StartEvent" bpmnElement="StartEvent_Inicio">
+        <dc:Bounds x="212" y="142" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="217" y="185" width="27" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_GwTemConta" bpmnElement="Gateway_TemConta" isMarkerVisible="true">
+        <dc:Bounds x="295" y="135" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="292" y="123" width="56" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Navega" bpmnElement="Task_NavegaProdutos">
+        <dc:Bounds x="670" y="130" width="110" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Carrinho" bpmnElement="Task_AdicionaCarrinho">
+        <dc:Bounds x="830" y="130" width="110" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Checkout" bpmnElement="Task_Checkout">
+        <dc:Bounds x="990" y="130" width="110" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_SelPag" bpmnElement="Task_SelecionaPagamento">
+        <dc:Bounds x="1150" y="130" width="120" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Separar" bpmnElement="Task_SepararItens">
+        <dc:Bounds x="990" y="450" width="110" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Embalar" bpmnElement="Task_EmbalarProduto">
+        <dc:Bounds x="1150" y="450" width="110" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Despachar" bpmnElement="Task_DespacharPedido">
+        <dc:Bounds x="1310" y="450" width="120" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Entregar" bpmnElement="Task_RealizarEntrega">
+        <dc:Bounds x="1480" y="450" width="120" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_GwEntregue" bpmnElement="Gateway_EntregaConcluida" isMarkerVisible="true">
+        <dc:Bounds x="1655" y="455" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1715" y="466" width="54" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Acompanha" bpmnElement="Task_AcompanhaPedido">
+        <dc:Bounds x="1600" y="130" width="120" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_EndSucesso" bpmnElement="EndEvent_Sucesso">
+        <dc:Bounds x="1772" y="142" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1750" y="185" width="81" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Indisponivel" bpmnElement="Task_ProdutoIndisponivel">
+        <dc:Bounds x="1300" y="600" width="140" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_EndCancelEstoque" bpmnElement="EndEvent_CancelEstoque">
+        <dc:Bounds x="1482" y="612" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1460" y="655" width="81" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Recusado" bpmnElement="Task_PagamentoRecusado">
+        <dc:Bounds x="1580" y="600" width="140" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_EndCancelPag" bpmnElement="EndEvent_CancelPagamento">
+        <dc:Bounds x="1762" y="612" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1751" y="655" width="59" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_CancelarDev" bpmnElement="Task_CancelarDevolver">
+        <dc:Bounds x="830" y="600" width="140" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_EndDevolucao" bpmnElement="EndEvent_Devolucao">
+        <dc:Bounds x="1022" y="612" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="996" y="655" width="88" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_VerifEstoque" bpmnElement="Task_VerificarEstoque">
+        <dc:Bounds x="1060" y="290" width="120" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_GwDisponivel" bpmnElement="Gateway_ProdutoDisponivel" isMarkerVisible="true">
+        <dc:Bounds x="1215" y="295" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1212" y="257.5" width="56" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_ProcessaPag" bpmnElement="Task_ProcessarPagamento">
+        <dc:Bounds x="1310" y="290" width="120" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Problema" bpmnElement="Task_RegistrarProblema">
+        <dc:Bounds x="1820" y="600" width="140" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_EndProblema" bpmnElement="EndEvent_ProblemaEntrega">
+        <dc:Bounds x="1872" y="702" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1859" y="745" width="63" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Login" bpmnElement="Task_FazerLogin">
+        <dc:Bounds x="400" y="100" width="110" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Cadastro" bpmnElement="Task_FazerCadastro">
+        <dc:Bounds x="400" y="170" width="110" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Notificar" bpmnElement="Task_NotificarCliente">
+        <dc:Bounds x="1960" y="290" width="120" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_GwAprovado" bpmnElement="Gateway_PagamentoAprovado" isMarkerVisible="true">
+        <dc:Bounds x="1495" y="295" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1491" y="257.5" width="57" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Confirmar" bpmnElement="Task_ConfirmarPedido">
+        <dc:Bounds x="1750" y="290" width="120" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Edge_Inicio_GwConta" bpmnElement="Flow_Inicio_GwConta">
+        <di:waypoint x="248" y="160" />
+        <di:waypoint x="295" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_GwConta_Login" bpmnElement="Flow_GwConta_Login">
+        <di:waypoint x="340" y="165" />
+        <di:waypoint x="373" y="165" />
+        <di:waypoint x="373" y="120" />
+        <di:waypoint x="400" y="120" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="360" y="103" width="19" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_GwConta_Cadastro" bpmnElement="Flow_GwConta_Cadastro">
+        <di:waypoint x="320" y="185" />
+        <di:waypoint x="320" y="210" />
+        <di:waypoint x="400" y="210" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="349" y="193" width="21" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Navega_Carrinho" bpmnElement="Flow_Navega_Carrinho">
+        <di:waypoint x="780" y="160" />
+        <di:waypoint x="830" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Carrinho_Checkout" bpmnElement="Flow_Carrinho_Checkout">
+        <di:waypoint x="940" y="160" />
+        <di:waypoint x="990" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Checkout_SelPag" bpmnElement="Flow_Checkout_SelPag">
+        <di:waypoint x="1100" y="160" />
+        <di:waypoint x="1150" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_SelPag_VerifEstoque" bpmnElement="Flow_SelPag_VerifEstoque" bioc:stroke="#0d4372" color:border-color="#0d4372">
+        <di:waypoint x="1210" y="190" />
+        <di:waypoint x="1210" y="240" />
+        <di:waypoint x="1120" y="240" />
+        <di:waypoint x="1120" y="290" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_VerifEstoque_GwDisponivel" bpmnElement="Flow_VerifEstoque_GwDisponivel" bioc:stroke="#0d4372" color:border-color="#0d4372">
+        <di:waypoint x="1180" y="320" />
+        <di:waypoint x="1215" y="320" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_GwDisponivel_ProcessaPag" bpmnElement="Flow_GwDisponivel_ProcessaPag" bioc:stroke="#0d4372" color:border-color="#0d4372">
+        <di:waypoint x="1265" y="320" />
+        <di:waypoint x="1310" y="320" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1274" y="303" width="19" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_GwDisponivel_Indisponivel" bpmnElement="Flow_GwDisponivel_Indisponivel" bioc:stroke="#6b3c00" color:border-color="#6b3c00">
+        <di:waypoint x="1265" y="320" />
+        <di:waypoint x="1280" y="320" />
+        <di:waypoint x="1280" y="630" />
+        <di:waypoint x="1300" y="630" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1286" y="363" width="21" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_GwAprovado_Confirmar" bpmnElement="Flow_GwAprovado_Confirmar" bioc:stroke="#0d4372" color:border-color="#0d4372">
+        <di:waypoint x="1545" y="320" />
+        <di:waypoint x="1750" y="320" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1773" y="303" width="19" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_GwAprovado_Recusado" bpmnElement="Flow_GwAprovado_Recusado" bioc:stroke="#6b3c00" color:border-color="#6b3c00">
+        <di:waypoint x="1520" y="345" />
+        <di:waypoint x="1520" y="430" />
+        <di:waypoint x="1630" y="430" />
+        <di:waypoint x="1630" y="600" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1526" y="360" width="21" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Notificar_CancelarDev" bpmnElement="Flow_Notificar_CancelarDev" bioc:stroke="#6b3c00" color:border-color="#6b3c00">
+        <di:waypoint x="1960" y="340" />
+        <di:waypoint x="1960" y="560" />
+        <di:waypoint x="900" y="560" />
+        <di:waypoint x="900" y="600" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1273" y="563" width="71" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Separar_Embalar" bpmnElement="Flow_Separar_Embalar" bioc:stroke="#831311" color:border-color="#831311">
+        <di:waypoint x="1100" y="480" />
+        <di:waypoint x="1150" y="480" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Embalar_Despachar" bpmnElement="Flow_Embalar_Despachar" bioc:stroke="#831311" color:border-color="#831311">
+        <di:waypoint x="1260" y="480" />
+        <di:waypoint x="1310" y="480" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Despachar_Entregar" bpmnElement="Flow_Despachar_Entregar" bioc:stroke="#831311" color:border-color="#831311">
+        <di:waypoint x="1430" y="480" />
+        <di:waypoint x="1480" y="480" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Entregar_GwEntregue" bpmnElement="Flow_Entregar_GwEntregue" bioc:stroke="#831311" color:border-color="#831311">
+        <di:waypoint x="1600" y="480" />
+        <di:waypoint x="1655" y="480" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_GwEntregue_Acompanha" bpmnElement="Flow_GwEntregue_Acompanha" bioc:stroke="#831311" color:border-color="#831311">
+        <di:waypoint x="1680" y="455" />
+        <di:waypoint x="1680" y="190" />
+        <bpmndi:BPMNLabel color:color="#0d4372">
+          <dc:Bounds x="1580" y="303" width="19" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_GwEntregue_Problema" bpmnElement="Flow_GwEntregue_Problema" bioc:stroke="#6b3c00" color:border-color="#6b3c00">
+        <di:waypoint x="1680" y="505" />
+        <di:waypoint x="1680" y="570" />
+        <di:waypoint x="1890" y="570" />
+        <di:waypoint x="1890" y="600" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1686" y="531" width="21" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Acompanha_Fim" bpmnElement="Flow_Acompanha_Fim">
+        <di:waypoint x="1720" y="160" />
+        <di:waypoint x="1772" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Indisponivel_EndCancel" bpmnElement="Flow_Indisponivel_EndCancel" bioc:stroke="#6b3c00" color:border-color="#6b3c00">
+        <di:waypoint x="1440" y="630" />
+        <di:waypoint x="1482" y="630" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Recusado_EndCancel" bpmnElement="Flow_Recusado_EndCancel" bioc:stroke="#6b3c00" color:border-color="#6b3c00">
+        <di:waypoint x="1720" y="630" />
+        <di:waypoint x="1762" y="630" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Problema_EndProblema" bpmnElement="Flow_Problema_EndProblema" bioc:stroke="#6b3c00" color:border-color="#6b3c00">
+        <di:waypoint x="1890" y="660" />
+        <di:waypoint x="1890" y="702" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_CancelarDev_End" bpmnElement="Flow_CancelarDev_End">
+        <di:waypoint x="970" y="630" />
+        <di:waypoint x="1022" y="630" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0r8alu3_di" bpmnElement="Flow_0r8alu3">
+        <di:waypoint x="510" y="130" />
+        <di:waypoint x="590" y="130" />
+        <di:waypoint x="590" y="160" />
+        <di:waypoint x="670" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ion8kw_di" bpmnElement="Flow_1ion8kw">
+        <di:waypoint x="510" y="200" />
+        <di:waypoint x="550" y="200" />
+        <di:waypoint x="550" y="80" />
+        <di:waypoint x="455" y="80" />
+        <di:waypoint x="455" y="100" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0papssm_di" bpmnElement="Flow_0papssm" bioc:stroke="#0d4372" color:border-color="#0d4372">
+        <di:waypoint x="1870" y="320" />
+        <di:waypoint x="1960" y="320" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0mdtpcd_di" bpmnElement="Flow_0mdtpcd">
+        <di:waypoint x="1430" y="320" />
+        <di:waypoint x="1495" y="320" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1yrok90_di" bpmnElement="Flow_1yrok90" bioc:stroke="#0d4372" color:border-color="#0d4372">
+        <di:waypoint x="1810" y="350" />
+        <di:waypoint x="1810" y="380" />
+        <di:waypoint x="1030" y="380" />
+        <di:waypoint x="1030" y="450" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ag8u3o_di" bpmnElement="Flow_1ag8u3o" bioc:stroke="#831311" color:border-color="#831311">
+        <di:waypoint x="1045" y="450" />
+        <di:waypoint x="1045" y="420" />
+        <di:waypoint x="1940" y="420" />
+        <di:waypoint x="1940" y="340" />
+        <di:waypoint x="1960" y="340" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
