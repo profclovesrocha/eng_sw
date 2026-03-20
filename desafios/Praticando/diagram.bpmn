@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" xmlns:color="http://www.omg.org/spec/BPMN/non-normative/color/1.0" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_08e22ky" targetNamespace="http://bpmn.io/schema/bpmn" exporter="bpmn-js (https://demo.bpmn.io)" exporterVersion="18.13.1">
+  <bpmn:process id="Process_02h8x6e" isExecutable="false">
+    <bpmn:task id="Activity_0tqmeqr" name="Equipe conquistaria o 1 e 2 colocado nas 24H de Le mans">
+      <bpmn:incoming>Flow_0m99cp2</bpmn:incoming>
+      <bpmn:incoming>Flow_1156oql</bpmn:incoming>
+      <bpmn:outgoing>Flow_0s9hc3f</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="Gateway_0tpi7d7" name="Caso largue bem">
+      <bpmn:incoming>Flow_1axu6h3</bpmn:incoming>
+      <bpmn:outgoing>Flow_0e5zipy</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="Gateway_0voj1ep" name="Caso largue mal">
+      <bpmn:incoming>Flow_14vz8le</bpmn:incoming>
+      <bpmn:outgoing>Flow_0tn5zgx</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:task id="Activity_1c7qkxs" name="Equipe encerra as atividades">
+      <bpmn:incoming>Flow_15o5p3m</bpmn:incoming>
+    </bpmn:task>
+    <bpmn:task id="Activity_1gubcbd" name="O Carro consegue manter voltas rápidas e constantes">
+      <bpmn:incoming>Flow_0e5zipy</bpmn:incoming>
+      <bpmn:outgoing>Flow_0m99cp2</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:sequenceFlow id="Flow_0e5zipy" sourceRef="Gateway_0tpi7d7" targetRef="Activity_1gubcbd" />
+    <bpmn:sequenceFlow id="Flow_0m99cp2" sourceRef="Activity_1gubcbd" targetRef="Activity_0tqmeqr" />
+    <bpmn:task id="Activity_0169mao" name="Mesmo com a potencia alta, o carro não consegue ser constante">
+      <bpmn:incoming>Flow_0tn5zgx</bpmn:incoming>
+      <bpmn:outgoing>Flow_1y2m4mc</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0te27xt</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:sequenceFlow id="Flow_0tn5zgx" sourceRef="Gateway_0voj1ep" targetRef="Activity_0169mao" />
+    <bpmn:exclusiveGateway id="Gateway_1knipas" name="Caso o piloto se acalme e controle o carro">
+      <bpmn:incoming>Flow_1y2m4mc</bpmn:incoming>
+      <bpmn:outgoing>Flow_1156oql</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_1y2m4mc" sourceRef="Activity_0169mao" targetRef="Gateway_1knipas" />
+    <bpmn:sequenceFlow id="Flow_1156oql" sourceRef="Gateway_1knipas" targetRef="Activity_0tqmeqr" />
+    <bpmn:exclusiveGateway id="Gateway_14su15c" name="Caso o piloto continue nervoso">
+      <bpmn:incoming>Flow_0te27xt</bpmn:incoming>
+      <bpmn:outgoing>Flow_15o5p3m</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_0te27xt" sourceRef="Activity_0169mao" targetRef="Gateway_14su15c" />
+    <bpmn:sequenceFlow id="Flow_15o5p3m" sourceRef="Gateway_14su15c" targetRef="Activity_1c7qkxs" />
+    <bpmn:task id="Activity_05dm9wq" name="A equipe correu ate 1954 com resultados constantes">
+      <bpmn:incoming>Flow_0s9hc3f</bpmn:incoming>
+      <bpmn:outgoing>Flow_1d46gsz</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:sequenceFlow id="Flow_0s9hc3f" name="Progresso da equipe ao longo dos anos" sourceRef="Activity_0tqmeqr" targetRef="Activity_05dm9wq" />
+    <bpmn:exclusiveGateway id="Gateway_0ta4abz" name="Retorno da equipe em 1956">
+      <bpmn:incoming>Flow_1d46gsz</bpmn:incoming>
+      <bpmn:outgoing>Flow_16id6ov</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_1d46gsz" sourceRef="Activity_05dm9wq" targetRef="Gateway_0ta4abz" />
+    <bpmn:task id="Activity_00007tr" name="Continuou correndo constantemente ate o seu fim em 2000">
+      <bpmn:incoming>Flow_16id6ov</bpmn:incoming>
+      <bpmn:outgoing>Flow_0vuu0e5</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:sequenceFlow id="Flow_16id6ov" sourceRef="Gateway_0ta4abz" targetRef="Activity_00007tr" />
+    <bpmn:endEvent id="Event_18s8pt0" name="A equipe abandonou oficialmente o campeonato em Le mans no ano de 2001">
+      <bpmn:incoming>Flow_0vuu0e5</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0vuu0e5" sourceRef="Activity_00007tr" targetRef="Event_18s8pt0" />
+    <bpmn:startEvent id="Event_07niv50" name="Sauber Mercedes">
+      <bpmn:outgoing>Flow_1axu6h3</bpmn:outgoing>
+      <bpmn:outgoing>Flow_14vz8le</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_1axu6h3" sourceRef="Event_07niv50" targetRef="Gateway_0tpi7d7" />
+    <bpmn:sequenceFlow id="Flow_14vz8le" sourceRef="Event_07niv50" targetRef="Gateway_0voj1ep" />
+    <bpmn:textAnnotation id="TextAnnotation_0b5itti">
+      <bpmn:text>Estreia da equipe em 1952, onde seus carros receberam o apelido de "Flecha de prata"</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:textAnnotation id="TextAnnotation_1fvx7qa">
+      <bpmn:text>Os pilotos  Hermann Lang
+e Fritz Riess venceram a corrida com 277 pilotando o Mercedes-Benz 300SL</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_10alg3p" associationDirection="None" sourceRef="Activity_0tqmeqr" targetRef="TextAnnotation_1fvx7qa" />
+    <bpmn:textAnnotation id="TextAnnotation_0vitgfx">
+      <bpmn:text>Curiosidade: O Carro antes do início da corrida pesava mais que o permitido, e a solução tomada foi raspar a pintura inteira do carro deixando apenas o alumínio da carroceria exposto</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_1t9l02u" associationDirection="None" sourceRef="Activity_1gubcbd" targetRef="TextAnnotation_0vitgfx" />
+    <bpmn:textAnnotation id="TextAnnotation_0kubnbv">
+      <bpmn:text>A equipe abandonou a corrida de 1955 apos um grave acidente na pista</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_0rhkmcu" associationDirection="None" sourceRef="Activity_05dm9wq" targetRef="TextAnnotation_0kubnbv" />
+    <bpmn:textAnnotation id="TextAnnotation_0qxs97s">
+      <bpmn:text>Em 1999 um acidente envolvendo o protótipo CLR GTR fez com que a equipe abandonasse mais uma vez a corrida</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_1j3bzcs" associationDirection="None" sourceRef="Activity_00007tr" targetRef="TextAnnotation_0qxs97s" />
+    <bpmn:association id="Association_1qrvk25" associationDirection="None" sourceRef="TextAnnotation_0b5itti" targetRef="Event_07niv50" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_02h8x6e">
+      <bpmndi:BPMNShape id="Gateway_0tpi7d7_di" bpmnElement="Gateway_0tpi7d7" isMarkerVisible="true" bioc:stroke="#6b3c00" bioc:fill="#ffe0b2" color:background-color="#ffe0b2" color:border-color="#6b3c00">
+        <dc:Bounds x="335" y="285" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="318" y="343" width="84" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0voj1ep_di" bpmnElement="Gateway_0voj1ep" isMarkerVisible="true" bioc:stroke="#6b3c00" bioc:fill="#ffe0b2" color:background-color="#ffe0b2" color:border-color="#6b3c00">
+        <dc:Bounds x="335" y="395" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="319" y="455" width="81" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0tqmeqr_di" bpmnElement="Activity_0tqmeqr">
+        <dc:Bounds x="610" y="250" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0169mao_di" bpmnElement="Activity_0169mao">
+        <dc:Bounds x="450" y="420" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1knipas_di" bpmnElement="Gateway_1knipas" isMarkerVisible="true" bioc:stroke="#6b3c00" bioc:fill="#ffe0b2" color:background-color="#ffe0b2" color:border-color="#6b3c00">
+        <dc:Bounds x="615" y="395" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="597" y="452" width="87" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1c7qkxs_di" bpmnElement="Activity_1c7qkxs">
+        <dc:Bounds x="760" y="460" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_14su15c_di" bpmnElement="Gateway_14su15c" isMarkerVisible="true" bioc:stroke="#6b3c00" bioc:fill="#ffe0b2" color:background-color="#ffe0b2" color:border-color="#6b3c00">
+        <dc:Bounds x="625" y="535" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="608" y="592" width="84" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1gubcbd_di" bpmnElement="Activity_1gubcbd">
+        <dc:Bounds x="440" y="230" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_05dm9wq_di" bpmnElement="Activity_05dm9wq">
+        <dc:Bounds x="910" y="260" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0ta4abz_di" bpmnElement="Gateway_0ta4abz" isMarkerVisible="true" bioc:stroke="#6b3c00" bioc:fill="#ffe0b2" color:background-color="#ffe0b2" color:border-color="#6b3c00">
+        <dc:Bounds x="1125" y="275" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1111" y="332" width="79" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_00007tr_di" bpmnElement="Activity_00007tr">
+        <dc:Bounds x="1290" y="260" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1yawy4n_di" bpmnElement="Event_18s8pt0" bioc:stroke="#831311" bioc:fill="#ffcdd2" color:background-color="#ffcdd2" color:border-color="#831311">
+        <dc:Bounds x="1492" y="207" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1471" y="250" width="79" height="80" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_07niv50_di" bpmnElement="Event_07niv50" bioc:stroke="#205022" bioc:fill="#c8e6c9" color:background-color="#c8e6c9" color:border-color="#205022">
+        <dc:Bounds x="192" y="322" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="166" y="365" width="88" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_1t9l02u_di" bpmnElement="Association_1t9l02u">
+        <di:waypoint x="501" y="230" />
+        <di:waypoint x="516" y="180" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_10alg3p_di" bpmnElement="Association_10alg3p">
+        <di:waypoint x="701" y="250" />
+        <di:waypoint x="740" y="213" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_0rhkmcu_di" bpmnElement="Association_0rhkmcu">
+        <di:waypoint x="981" y="340" />
+        <di:waypoint x="1002" y="380" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_1j3bzcs_di" bpmnElement="Association_1j3bzcs">
+        <di:waypoint x="1360" y="340" />
+        <di:waypoint x="1383" y="387" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_1qrvk25_di" bpmnElement="Association_1qrvk25">
+        <di:waypoint x="233" y="260" />
+        <di:waypoint x="215" y="323" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="TextAnnotation_0b5itti_di" bpmnElement="TextAnnotation_0b5itti">
+        <dc:Bounds x="160" y="190" width="165" height="70" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0e5zipy_di" bpmnElement="Flow_0e5zipy">
+        <di:waypoint x="385" y="310" />
+        <di:waypoint x="413" y="310" />
+        <di:waypoint x="413" y="270" />
+        <di:waypoint x="440" y="270" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0m99cp2_di" bpmnElement="Flow_0m99cp2">
+        <di:waypoint x="540" y="270" />
+        <di:waypoint x="570" y="270" />
+        <di:waypoint x="570" y="290" />
+        <di:waypoint x="610" y="290" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0tn5zgx_di" bpmnElement="Flow_0tn5zgx">
+        <di:waypoint x="385" y="420" />
+        <di:waypoint x="418" y="420" />
+        <di:waypoint x="418" y="460" />
+        <di:waypoint x="450" y="460" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1y2m4mc_di" bpmnElement="Flow_1y2m4mc">
+        <di:waypoint x="550" y="460" />
+        <di:waypoint x="573" y="460" />
+        <di:waypoint x="573" y="420" />
+        <di:waypoint x="615" y="420" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1156oql_di" bpmnElement="Flow_1156oql">
+        <di:waypoint x="640" y="395" />
+        <di:waypoint x="640" y="363" />
+        <di:waypoint x="660" y="363" />
+        <di:waypoint x="660" y="330" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0te27xt_di" bpmnElement="Flow_0te27xt">
+        <di:waypoint x="500" y="500" />
+        <di:waypoint x="500" y="560" />
+        <di:waypoint x="625" y="560" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_15o5p3m_di" bpmnElement="Flow_15o5p3m">
+        <di:waypoint x="650" y="535" />
+        <di:waypoint x="650" y="500" />
+        <di:waypoint x="760" y="500" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="TextAnnotation_0vitgfx_di" bpmnElement="TextAnnotation_0vitgfx">
+        <dc:Bounds x="490" y="80" width="190" height="100" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_1fvx7qa_di" bpmnElement="TextAnnotation_1fvx7qa">
+        <dc:Bounds x="740" y="150" width="160" height="70" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0s9hc3f_di" bpmnElement="Flow_0s9hc3f">
+        <di:waypoint x="710" y="290" />
+        <di:waypoint x="810" y="290" />
+        <di:waypoint x="810" y="300" />
+        <di:waypoint x="910" y="300" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="780" y="310" width="79" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="TextAnnotation_0kubnbv_di" bpmnElement="TextAnnotation_0kubnbv">
+        <dc:Bounds x="960" y="380" width="189.99282067645183" height="59.997208040842374" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1d46gsz_di" bpmnElement="Flow_1d46gsz">
+        <di:waypoint x="1010" y="300" />
+        <di:waypoint x="1125" y="300" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_16id6ov_di" bpmnElement="Flow_16id6ov">
+        <di:waypoint x="1175" y="300" />
+        <di:waypoint x="1290" y="300" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="TextAnnotation_0qxs97s_di" bpmnElement="TextAnnotation_0qxs97s">
+        <dc:Bounds x="1340" y="387" width="240" height="65" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0vuu0e5_di" bpmnElement="Flow_0vuu0e5">
+        <di:waypoint x="1390" y="300" />
+        <di:waypoint x="1441" y="300" />
+        <di:waypoint x="1441" y="225" />
+        <di:waypoint x="1492" y="225" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1axu6h3_di" bpmnElement="Flow_1axu6h3">
+        <di:waypoint x="228" y="340" />
+        <di:waypoint x="282" y="340" />
+        <di:waypoint x="282" y="310" />
+        <di:waypoint x="335" y="310" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_14vz8le_di" bpmnElement="Flow_14vz8le">
+        <di:waypoint x="228" y="340" />
+        <di:waypoint x="280" y="340" />
+        <di:waypoint x="280" y="420" />
+        <di:waypoint x="335" y="420" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
