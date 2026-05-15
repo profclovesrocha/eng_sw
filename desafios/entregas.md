@@ -3,7 +3,7 @@
 - DESAFIO 1: 06/MARÇO/2026 - LAB. 3 (FERIADO ESTADUAL)
 - DESAFIO 2: 13/MARÇO/2026 (da Aula 3)
 - DESAFIO 3: 20/MARÇO/2026 (da Aula 4)
-- DESAFIO FINAL: 05/JUNHO (Sala de Aula)
+- DESAFIO FINAL: 05/JUNHO (Sala de Aula) às 8H20 AM
 - **Desafio Final** para a composição da nota **AV2** foi estruturado integrando os conceitos de modelagem empresarial, especificação técnica e desenvolvimento de APIs, com foco na entrega de valor organizacional.
 
 ---
