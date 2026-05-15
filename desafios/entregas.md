@@ -48,3 +48,4 @@ Para o sucesso do projeto, recomenda-se que a equipe (mínimo de envolvimento co
 # SUGESTÃO - Desafios para Smart City 
 - https://docs.google.com/document/d/1C0nNNBLqCDSXJoIcvWlhaoC26HUpmbETfKGtKsIpeJs/edit?usp=sharing
 - Conecte-se com a maior plataforma de cidades inteligentes da América Latina https://connectedsmartcities.com.br/
+- Write like Python, run like C++ : https://mojolang.org/
