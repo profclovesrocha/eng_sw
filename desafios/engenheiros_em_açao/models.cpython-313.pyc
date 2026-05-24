@@ -1,0 +1,10 @@
+def fetch_freight_quotes(zip_code: str):
+    # Simulando o retorno de APIs de múltiplas transportadoras
+    return [
+        {"carrier_name": "Logística Rápida", "cost": 45.50, "delivery_days": 3, "zip_code_destination": zip_code},
+        {"carrier_name": "Transportes Lentos", "cost": 15.00, "delivery_days": 15, "zip_code_destination": zip_code},
+        # RUIDO: Sistema da transportadora bugou e mandou frete negativo
+        {"carrier_name": "Transportadora Bugada", "cost": -10.00, "delivery_days": 5, "zip_code_destination": zip_code}, 
+        # RUIDO: Promessa de entrega em 0 dias é inválida no nosso contrato
+        {"carrier_name": "Expresso Erro", "cost": 50.00, "delivery_days": 0, "zip_code_destination": zip_code}           
+    ]

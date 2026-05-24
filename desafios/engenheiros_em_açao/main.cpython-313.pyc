@@ -1,0 +1,15 @@
+from pydantic import BaseModel, Field
+from datetime import datetime
+from typing import Dict
+
+class FreightQuote(BaseModel):
+    carrier_name: str
+    cost: float = Field(..., ge=0)        # O frete não pode ser negativo
+    delivery_days: int = Field(..., gt=0) # Tem que entregar em pelo menos 1 dia
+    zip_code_destination: str             
+
+class IntegrityReport(BaseModel):
+    total_rows: int
+    valid_rows: int
+    invalid_rows: int
+    errors_by_field: Dict[str, int]

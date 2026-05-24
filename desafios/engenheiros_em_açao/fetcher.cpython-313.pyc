@@ -1,0 +1,79 @@
+from flask import Flask, jsonify, request
+from models import FreightQuote, IntegrityReport
+from fetcher import fetch_freight_quotes
+from cache import get_cached_data, set_cached_data
+from pydantic import ValidationError
+import time
+
+app = Flask(__name__)
+START_TIME = time.time()
+
+@app.route('/')
+def home():
+    return jsonify({
+        "mensagem": "Bem-vindo ao Motor de Otimização de Fretes!",
+        "documentacao": {
+            "status": "/status",
+            "cotacao_exemplo": "/quote?zip_code=53400000"
+        }
+    }), 200
+
+@app.route('/status')
+def status():
+    return jsonify({
+        "status": "online",
+        "uptime": f"{time.time() - START_TIME:.2f}s",
+        "version": "1.0.0"
+    }), 200
+
+@app.route('/quote', methods=['GET'])
+def quote():
+    # Pega o CEP da URL ou usa um padrão genérico
+    zip_code = request.args.get('zip_code', '00000000') 
+    cache_key = f"quote_{zip_code}"
+
+    # 1. Tenta buscar do cache primeiro
+    cached = get_cached_data(cache_key)
+    if cached:
+        return jsonify(cached)
+
+    # 2. Busca dados externos na fonte ruidosa
+    raw_data = fetch_freight_quotes(zip_code)
+    valid_quotes, errors = [], {}
+    
+    # 3. Sanitização e Validação
+    for item in raw_data:
+        try:
+            quote_data = FreightQuote(**item)
+            valid_quotes.append(quote_data.model_dump())
+        except ValidationError as e:
+            for error in e.errors():
+                field = error['loc'][0]
+                errors[field] = errors.get(field, 0) + 1
+
+    # 4. Regra de Negócio: Encontra a opção mais barata entre as íntegras
+    best_option = None
+    if valid_quotes:
+        best_option = min(valid_quotes, key=lambda x: x['cost'])
+
+    # 5. Gera o relatório de transparência
+    report = IntegrityReport(
+        total_rows=len(raw_data),
+        valid_rows=len(valid_quotes),
+        invalid_rows=len(raw_data) - len(valid_quotes),
+        errors_by_field=errors
+    )
+
+    response_data = {
+        "best_option": best_option,
+        "all_valid_options": valid_quotes,
+        "meta": {"integrity_report": report.model_dump()}
+    }
+    
+    # 6. Salva no cache
+    set_cached_data(cache_key, response_data)
+    
+    return jsonify(response_data)
+
+if __name__ == '__main__':
+    app.run(debug=True, port=5000)
